@@ -5,6 +5,11 @@ import { StreamableHTTPServerTransport } from "@modelcontextprotocol/sdk/server/
 import type { VercelRequest, VercelResponse } from "@vercel/node";
 import { createMcpServer } from "../src/server.js";
 
+// Enable streaming for Vercel Serverless Functions
+export const config = {
+  supportsResponseStreaming: true,
+};
+
 export default async function handler(req: VercelRequest, res: VercelResponse) {
   // Handle CORS preflight
   if (req.method === "OPTIONS") {
