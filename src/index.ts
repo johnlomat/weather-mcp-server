@@ -70,7 +70,7 @@ app.post("/messages", async (req, res) => {
 
 // Health check endpoint
 app.get("/health", (_req, res) => {
-  res.json({ status: "ok", server: "weather-mcp-server" });
+  res.json({ status: "ok", server: "weather-mcp-ainativekit" });
 });
 
 app.listen(PORT, () => {

@@ -1,5 +1,5 @@
 {
-  "name": "weather-mcp-server",
+  "name": "weather-mcp-ainativekit",
   "version": "1.0.0",
   "description": "Weather checker MCP server for ChatGPT Apps",
   "type": "module",
