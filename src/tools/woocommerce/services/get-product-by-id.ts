@@ -1,16 +1,13 @@
 // Fetch single product by ID from WooCommerce Store API
 
 import { WooProduct } from "../types";
+import { getWcBaseUrl } from "../../../lib/utils";
 
 export async function fetchProductById(id: number): Promise<WooProduct> {
-  const baseUrl = process.env.WOOCOMMERCE_URL;
-
-  if (!baseUrl) {
-    throw new Error("WOOCOMMERCE_URL environment variable is not set");
-  }
+  const wcBaseUrl = getWcBaseUrl();
 
   const response = await fetch(
-    `${baseUrl}/wp-json/wc/store/v1/products/${id}`
+    `${wcBaseUrl}/products/${id}`
   );
 
   if (!response.ok) {

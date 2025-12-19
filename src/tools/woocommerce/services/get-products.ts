@@ -1,6 +1,7 @@
 // Fetch products from WooCommerce Store API
 
 import { WooProduct } from "../types";
+import { getWcBaseUrl } from "../../../lib/utils";
 
 interface FetchProductsOptions {
   search?: string;
@@ -9,12 +10,7 @@ interface FetchProductsOptions {
 }
 
 export async function fetchProducts(options: FetchProductsOptions = {}): Promise<WooProduct[]> {
-  const baseUrl = process.env.WOOCOMMERCE_URL;
-
-  if (!baseUrl) {
-    throw new Error("WOOCOMMERCE_URL environment variable is not set");
-  }
-
+  const wcBaseUrl = getWcBaseUrl();
   const { search, category, perPage = 10 } = options;
 
   const params = new URLSearchParams();
@@ -29,7 +25,7 @@ export async function fetchProducts(options: FetchProductsOptions = {}): Promise
   }
 
   const response = await fetch(
-    `${baseUrl}/wp-json/wc/store/v1/products?${params.toString()}`
+    `${wcBaseUrl}/products?${params.toString()}`
   );
 
   if (!response.ok) {
