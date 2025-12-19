@@ -1,39 +1,7 @@
 import React from 'react'
 import { Card, Badge, Chip } from '@ainativekit/ui'
-
-interface WeatherData {
-  location?: string
-  temperature?: number
-  humidity?: number
-  windSpeed?: number
-  feelsLike?: number
-  uvIndex?: number
-  weatherCode?: number
-}
-
-interface WeatherWidgetProps {
-  data: WeatherData
-}
-
-const getWeatherEmoji = (code: number): string => {
-  if (code === 0) return '☀️'
-  if (code <= 3) return '⛅'
-  if (code <= 49) return '🌫️'
-  if (code <= 69) return '🌧️'
-  if (code <= 79) return '🌨️'
-  if (code <= 99) return '⛈️'
-  return '🌡️'
-}
-
-const getWeatherDescription = (code: number): string => {
-  if (code === 0) return 'Clear sky'
-  if (code <= 3) return 'Partly cloudy'
-  if (code <= 49) return 'Foggy'
-  if (code <= 69) return 'Rainy'
-  if (code <= 79) return 'Snowy'
-  if (code <= 99) return 'Thunderstorm'
-  return 'Unknown'
-}
+import { WeatherWidgetProps } from './types'
+import { getWeatherEmoji, getWeatherDescription } from './utils'
 
 export const WeatherWidget: React.FC<WeatherWidgetProps> = ({ data }) => {
   const emoji = getWeatherEmoji(data.weatherCode || 0)
@@ -63,3 +31,5 @@ export const WeatherWidget: React.FC<WeatherWidgetProps> = ({ data }) => {
     </Card>
   )
 }
+
+export * from './types'
