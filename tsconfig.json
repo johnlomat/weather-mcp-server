@@ -10,8 +10,14 @@
     "skipLibCheck": true,
     "resolveJsonModule": true,
     "declaration": true,
-    "noEmit": true
+    "noEmit": true,
+    "jsx": "react-jsx",
+    "lib": ["ES2022", "DOM", "DOM.Iterable"],
+    "baseUrl": ".",
+    "paths": {
+      "@/*": ["./src/*"]
+    }
   },
   "include": ["src/**/*"],
-  "exclude": ["node_modules", "dist", "src/widget", "src/components"]
+  "exclude": ["node_modules", "dist"]
 }

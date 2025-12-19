@@ -6,7 +6,7 @@ import { SSEServerTransport } from "@modelcontextprotocol/sdk/server/sse.js";
 import { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js";
 import express from "express";
 import { randomUUID } from "node:crypto";
-import { createMcpServer } from "./server";
+import { createMcpServer } from "@/server";
 
 const PORT = process.env.PORT || 3000;
 const app = express();
