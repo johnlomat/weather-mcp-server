@@ -1,7 +1,7 @@
 import React from 'react'
 import ReactDOM from 'react-dom/client'
-import { WeatherWidget } from '../components/weather-widget'
-import { ProductsWidget } from '../components/products-widget'
+import { WeatherWidget } from '@/components/weather-widget'
+import { ProductsWidget } from '@/components/products-widget'
 import { demoData } from './demo-data'
 
 // Get widget type from URL query param

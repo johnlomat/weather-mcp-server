@@ -3,8 +3,9 @@
 
 import { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js";
 import { z } from "zod";
-import { fetchWeather } from "./tools/weather";
-import { fetchProducts, fetchProductById } from "./tools/woocommerce";
+import { fetchWeather } from "@/tools/weather";
+import { fetchProducts, fetchProductById } from "@/tools/woocommerce";
+import { formatProductText } from "@/lib/utils";
 
 export function createMcpServer(): McpServer {
   const server = new McpServer({
@@ -71,13 +72,13 @@ export function createMcpServer(): McpServer {
     async ({ search, category, perPage }) => {
       try {
         const products = await fetchProducts({ search, category, perPage });
-        const productSummary = products.map(p => p.name).join(", ");
+        const productList = products.map(formatProductText).join("\n\n");
         return {
           structuredContent: { type: "array", items: products },
           content: [
             {
               type: "text" as const,
-              text: `Found ${products.length} products: ${productSummary}`,
+              text: `Found ${products.length} products:\n\n${productList}`,
             },
           ],
           _meta: { products } as Record<string, unknown>,
@@ -116,7 +117,7 @@ export function createMcpServer(): McpServer {
           content: [
             {
               type: "text" as const,
-              text: `Product: ${product.name} - ${product.is_in_stock ? "In Stock" : "Out of Stock"}`,
+              text: `Product Details:\n\n${formatProductText(product)}`,
             },
           ],
           _meta: { ...product } as Record<string, unknown>,

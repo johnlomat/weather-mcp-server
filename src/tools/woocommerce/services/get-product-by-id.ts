@@ -1,7 +1,7 @@
 // Fetch single product by ID from WooCommerce Store API
 
 import { WooProduct } from "../types";
-import { getWcBaseUrl } from "../../../lib/utils";
+import { getWcBaseUrl } from "@/lib/utils";
 
 export async function fetchProductById(id: number): Promise<WooProduct> {
   const wcBaseUrl = getWcBaseUrl();

@@ -1,7 +1,7 @@
 // Fetch products from WooCommerce Store API
 
 import { WooProduct } from "../types";
-import { getWcBaseUrl } from "../../../lib/utils";
+import { getWcBaseUrl } from "@/lib/utils";
 
 interface FetchProductsOptions {
   search?: string;

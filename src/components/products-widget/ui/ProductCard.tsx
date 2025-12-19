@@ -1,7 +1,7 @@
 import React from 'react'
 import { Card, Badge, Chip } from '@ainativekit/ui'
 import { Product } from '../types'
-import { formatPrice, stripHtml } from '../utils'
+import { formatPrice, stripHtml } from '@/lib/utils'
 
 interface ProductCardProps {
   product: Product
