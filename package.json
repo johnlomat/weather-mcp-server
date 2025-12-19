@@ -1,22 +1,36 @@
 {
-  "name": "weather-mcp-server",
+  "name": "mcp-ainativekit-playground",
   "version": "1.0.0",
-  "description": "Weather checker MCP server for ChatGPT Apps",
+  "description": "MCP server playground with AINativeKit widgets for ChatGPT Apps",
   "type": "module",
   "scripts": {
-    "build": "tsc",
+    "build": "tsup src/index.ts --format esm --dts && vite build",
+    "build:mcp": "tsup src/index.ts --format esm --dts",
+    "build:widget": "vite build",
     "start": "node dist/index.js",
-    "dev": "tsc --watch"
+    "dev": "tsup src/index.ts --format esm --watch",
+    "dev:widget": "vite",
+    "typecheck": "tsc --noEmit && tsc --noEmit -p tsconfig.widget.json",
+    "typecheck:mcp": "tsc --noEmit",
+    "typecheck:widget": "tsc --noEmit -p tsconfig.widget.json"
   },
   "dependencies": {
+    "@ainativekit/ui": "^0.17.0",
     "@modelcontextprotocol/sdk": "^1.0.0",
     "express": "^5.2.1",
+    "react": "^18.3.1",
+    "react-dom": "^18.3.1",
     "zod": "^3.23.0"
   },
   "devDependencies": {
     "@types/express": "^5.0.6",
     "@types/node": "^20.10.0",
+    "@types/react": "^18.3.18",
+    "@types/react-dom": "^18.3.5",
     "@vercel/node": "^5.5.15",
-    "typescript": "^5.3.0"
+    "@vitejs/plugin-react": "^4.3.4",
+    "tsup": "^8.5.1",
+    "typescript": "^5.3.0",
+    "vite": "^6.0.5"
   }
 }

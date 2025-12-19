@@ -6,7 +6,7 @@ import { SSEServerTransport } from "@modelcontextprotocol/sdk/server/sse.js";
 import { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js";
 import express from "express";
 import { randomUUID } from "node:crypto";
-import { createMcpServer } from "./server.js";
+import { createMcpServer } from "./server";
 
 const PORT = process.env.PORT || 3000;
 const app = express();
@@ -70,11 +70,11 @@ app.post("/messages", async (req, res) => {
 
 // Health check endpoint
 app.get("/health", (_req, res) => {
-  res.json({ status: "ok", server: "weather-mcp-server" });
+  res.json({ status: "ok", server: "mcp-ainativekit-playground" });
 });
 
 app.listen(PORT, () => {
-  console.log(`Weather MCP server running on http://localhost:${PORT}`);
+  console.log(`MCP AINativeKit Playground running on http://localhost:${PORT}`);
   console.log(`MCP endpoint (ChatGPT): http://localhost:${PORT}/mcp`);
   console.log(`SSE endpoint (Inspector): http://localhost:${PORT}/sse`);
 });
