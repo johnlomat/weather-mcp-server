@@ -8,7 +8,7 @@ import { fetchProducts, fetchProductById } from "./tools/woocommerce";
 
 export function createMcpServer(): McpServer {
   const server = new McpServer({
-    name: "weather-server",
+    name: "mcp-ainativekit-playground",
     version: "1.0.0",
   });
 
