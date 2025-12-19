@@ -1,5 +1,7 @@
 // WooCommerce formatting utilities
 
+import { stripHtml } from "./strip-html";
+
 // Minimal interface for price formatting (works with both full WooProductPrices and widget ProductPrices)
 interface PriceInfo {
   price: string;
@@ -33,15 +35,16 @@ export function formatPrice(price: string, priceInfo: Pick<PriceInfo, 'currency_
  * Format a product for text response (used by MCP tool responses)
  */
 export function formatProductText(product: ProductInfo): string {
+  const name = stripHtml(product.name);
   const price = formatPrice(product.prices.price, product.prices);
   const saleInfo = product.on_sale ? " (On Sale)" : "";
   const stock = product.is_in_stock ? "In Stock" : "Out of Stock";
   const rating = product.average_rating !== "0"
     ? `${product.average_rating}/5 (${product.review_count} reviews)`
     : "No reviews";
-  const category = product.categories[0]?.name || "Uncategorized";
+  const category = stripHtml(product.categories[0]?.name || "Uncategorized");
 
-  return `• ${product.name}
+  return `• ${name}
   ID: ${product.id}
   Price: ${price}${saleInfo}
   Stock: ${stock}
