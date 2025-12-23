@@ -5,7 +5,6 @@ import { StreamableHTTPServerTransport } from "@modelcontextprotocol/sdk/server/
 import { SSEServerTransport } from "@modelcontextprotocol/sdk/server/sse.js";
 import { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js";
 import express from "express";
-import { randomUUID } from "node:crypto";
 import { createMcpServer } from "@/server";
 
 const PORT = process.env.PORT || 3000;
@@ -32,27 +31,20 @@ app.use((req, res, next) => {
   }
 });
 
-// Store servers and transports by session ID
+// Store servers and transports by session ID (for SSE)
 const mcpServers = new Map<string, McpServer>();
-const streamableTransports = new Map<string, StreamableHTTPServerTransport>();
 const sseTransports = new Map<string, SSEServerTransport>();
 
 // Streamable HTTP MCP endpoint (for ChatGPT)
+// Using stateless mode for better compatibility
 app.all("/mcp", async (req, res) => {
-  const sessionId = "streamable-default";
-  let transport = streamableTransports.get(sessionId);
+  // Create new transport for each request (stateless mode)
+  const transport = new StreamableHTTPServerTransport({
+    sessionIdGenerator: undefined, // Stateless mode
+  });
 
-  if (!transport) {
-    transport = new StreamableHTTPServerTransport({
-      sessionIdGenerator: () => randomUUID(),
-    });
-    streamableTransports.set(sessionId, transport);
-
-    const server = createMcpServer();
-    mcpServers.set(sessionId, server);
-    await server.connect(transport);
-  }
-
+  const server = createMcpServer();
+  await server.connect(transport);
   await transport.handleRequest(req, res);
 });
 
