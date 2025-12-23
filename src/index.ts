@@ -10,7 +10,15 @@ import { createMcpServer } from "@/server";
 
 const PORT = process.env.PORT || 3000;
 const app = express();
-app.use(express.json());
+
+// Only use JSON parsing for non-MCP routes
+app.use((req, res, next) => {
+  if (req.path === "/mcp") {
+    next();
+  } else {
+    express.json()(req, res, next);
+  }
+});
 
 // Store servers and transports by session ID
 const mcpServers = new Map<string, McpServer>();
