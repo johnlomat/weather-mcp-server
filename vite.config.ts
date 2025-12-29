@@ -15,6 +15,12 @@ export default defineConfig({
     emptyOutDir: true,
     rollupOptions: {
       input: path.resolve(__dirname, 'src/widget/index.html'),
+      output: {
+        // Use stable filenames without content hashes for MCP resource references
+        entryFileNames: 'assets/index.js',
+        chunkFileNames: 'assets/[name].js',
+        assetFileNames: 'assets/[name].[ext]',
+      },
     }
   }
 })

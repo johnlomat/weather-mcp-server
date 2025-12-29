@@ -5,7 +5,12 @@ import { StreamableHTTPServerTransport } from "@modelcontextprotocol/sdk/server/
 import { SSEServerTransport } from "@modelcontextprotocol/sdk/server/sse.js";
 import { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js";
 import express from "express";
+import path from "path";
+import { fileURLToPath } from "url";
 import { createMcpServer } from "@/server";
+
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
 
 const PORT = process.env.PORT || 3000;
 const app = express();
@@ -22,30 +27,31 @@ app.use((req, res, next) => {
   next();
 });
 
-// Only use JSON parsing for non-MCP routes
-app.use((req, res, next) => {
-  if (req.path === "/mcp") {
-    next();
-  } else {
-    express.json()(req, res, next);
-  }
-});
+// JSON parsing for all routes
+app.use(express.json());
+
+// Serve widget static files (from dist/widget when running built server)
+app.use("/widget", express.static(path.join(__dirname, "widget")));
 
 // Store servers and transports by session ID (for SSE)
 const mcpServers = new Map<string, McpServer>();
 const sseTransports = new Map<string, SSEServerTransport>();
 
 // Streamable HTTP MCP endpoint (for ChatGPT)
-// Using stateless mode for better compatibility
-app.all("/mcp", async (req, res) => {
-  // Create new transport for each request (stateless mode)
-  const transport = new StreamableHTTPServerTransport({
-    sessionIdGenerator: undefined, // Stateless mode
-  });
+// Create a single server and transport instance (reused across requests)
+const mcpServer = createMcpServer();
+const mcpTransport = new StreamableHTTPServerTransport({
+  sessionIdGenerator: undefined, // Stateless mode
+});
 
-  const server = createMcpServer();
-  await server.connect(transport);
-  await transport.handleRequest(req, res);
+// Connect server to transport
+(async () => {
+  await mcpServer.connect(mcpTransport);
+})();
+
+// Handle both GET and POST for /mcp endpoint
+app.all("/mcp", async (req, res) => {
+  await mcpTransport.handleRequest(req, res, req.body);
 });
 
 // SSE endpoint for MCP Inspector (GET to establish SSE connection)
