@@ -38,16 +38,20 @@ const mcpServers = new Map<string, McpServer>();
 const sseTransports = new Map<string, SSEServerTransport>();
 
 // Streamable HTTP MCP endpoint (for ChatGPT)
-// Using stateless mode for better compatibility
-app.all("/mcp", async (req, res) => {
-  // Create new transport for each request (stateless mode)
-  const transport = new StreamableHTTPServerTransport({
-    sessionIdGenerator: undefined, // Stateless mode
-  });
+// Create a single server and transport instance (reused across requests)
+const mcpServer = createMcpServer();
+const mcpTransport = new StreamableHTTPServerTransport({
+  sessionIdGenerator: undefined, // Stateless mode
+});
 
-  const server = createMcpServer();
-  await server.connect(transport);
-  await transport.handleRequest(req, res, req.body);
+// Connect server to transport
+(async () => {
+  await mcpServer.connect(mcpTransport);
+})();
+
+// Handle both GET and POST for /mcp endpoint
+app.all("/mcp", async (req, res) => {
+  await mcpTransport.handleRequest(req, res, req.body);
 });
 
 // SSE endpoint for MCP Inspector (GET to establish SSE connection)
